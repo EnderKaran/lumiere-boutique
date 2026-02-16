@@ -31,7 +31,7 @@ async function main() {
         description: 'Expertly crafted from Italian silk velvet, featuring a draped cowl neckline.',
         price: 450.00,
         stock: 10,
-        images: ['https://images.unsplash.com/photo-1539008835279-43468093523c?q=80&w=1000'],
+        images: ['https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&q=80&w=1000'],
         colors: ['Deep Burgundy', 'Black', 'Emerald'],
         sizes: ['XS', 'S', 'M', 'L'],
         categoryId: dresses.id,
