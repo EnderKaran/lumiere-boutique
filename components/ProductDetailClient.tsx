@@ -129,7 +129,10 @@ export default function ProductDetailClient({ product }: { product: ProductWithC
 
         {/* ZUSTAND: Sepete Ekle Butonu */}
         <button 
-          onClick={() => addItem(product, selectedColor, selectedSize)}
+          onClick={() => {
+            // Ürünü, seçili rengi ve bedeni gönderiyoruz
+            addItem(product, selectedColor, selectedSize);
+          }}
           className="w-full bg-lumiere-dark text-white py-5 flex items-center justify-center gap-3 text-sm tracking-widest uppercase hover:bg-lumiere-accent transition duration-300 mb-6"
         >
           <ShoppingBag size={18} /> Add to Bag

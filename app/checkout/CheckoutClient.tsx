@@ -134,7 +134,7 @@ export default function CheckoutClient({ userEmail }: { userEmail: string }) {
           <h2 className="font-serif text-xl text-lumiere-dark mb-6">Order Summary</h2>
           
           <div className="space-y-4 mb-6 max-h-[40vh] overflow-y-auto pr-2">
-            {items.map((item, idx) => (
+            {items.map((item: any, idx: number) => (
               <div key={`${item.id}-${idx}`} className="flex gap-4">
                 <div className="w-16 h-20 bg-zinc-100 rounded overflow-hidden shrink-0 relative">
                   <span className="absolute -top-2 -right-2 bg-lumiere-gray text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center z-10">
