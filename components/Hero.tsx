@@ -14,9 +14,6 @@ export default function Hero() {
         <p className="text-lumiere-gray mb-8 text-base md:text-lg max-w-md mx-auto md:mx-0">
           Discover our autumn collection of artisanal ceramics and ethically sourced leather goods.
         </p>
-        <button className="bg-lumiere-dark text-white px-8 py-4 uppercase text-xs tracking-widest hover:bg-lumiere-accent transition-colors duration-300">
-          Shop the Collection
-        </button>
       </div>
       
       {/* Image Container */}
