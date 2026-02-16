@@ -14,21 +14,20 @@ export default function CheckoutClient({ userEmail }: { userEmail: string }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [isMounted, setIsMounted] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false); // 1. YENİ: Başarı bayrağı eklendi
 
-  // 1. İstemci tarafında yüklendiğini belirt
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // 2. HATA ÇÖZÜMÜ: Sepet boşsa yönlendirme işlemini "useEffect" içinde yapıyoruz
+  // 2. GÜNCELLEME: Eğer başarılı bir ödeme yapılmadıysa ve sepet boşsa anasayfaya at
   useEffect(() => {
-    if (isMounted && items.length === 0) {
+    if (isMounted && items.length === 0 && !isSuccess) {
       router.push("/");
     }
-  }, [isMounted, items.length, router]);
+  }, [isMounted, items.length, router, isSuccess]);
 
-  // Sayfa yüklenmediyse veya sepet boşsa (yönlendiriliyorsa) boş ekran göster
-  if (!isMounted || items.length === 0) return null;
+  if (!isMounted || (items.length === 0 && !isSuccess)) return null;
 
   const handlePayment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -38,11 +37,11 @@ export default function CheckoutClient({ userEmail }: { userEmail: string }) {
     const formData = new FormData(e.currentTarget);
     const shippingData = Object.fromEntries(formData.entries());
 
-    // Server Action'ı çağırıp Iyzico simülasyonunu başlatıyoruz
     const res = await processIyzicoPayment(items, cartTotal(), shippingData);
 
     if (res.success) {
-      clearCart(); // Ödeme başarılıysa Zustand sepetini boşalt
+      setIsSuccess(true); // 3. YENİ: Başarı bayrağını kaldırıyoruz ki useEffect bizi anasayfaya atmasın
+      clearCart(); 
       router.push(`/success?orderId=${res.orderId}&tx=${res.transactionId}`);
     } else {
       setError(res.error || "Bilinmeyen bir hata oluştu.");
@@ -64,7 +63,6 @@ export default function CheckoutClient({ userEmail }: { userEmail: string }) {
         )}
 
         <form onSubmit={handlePayment} className="space-y-8">
-          {/* İletişim */}
           <div>
             <input 
               type="email" 
@@ -87,7 +85,6 @@ export default function CheckoutClient({ userEmail }: { userEmail: string }) {
             <input type="text" name="zip" placeholder="ZIP Code" required className="border border-zinc-300 bg-white px-4 py-3 text-sm outline-none focus:border-lumiere-dark transition" />
           </div>
 
-          {/* IYZICO ÖDEME ALANI SİMÜLASYONU */}
           <h2 className="font-serif text-2xl text-lumiere-dark mb-6 pt-4 border-t border-zinc-200">Payment</h2>
           
           <div className="bg-white border border-zinc-300 p-6 rounded-md">
