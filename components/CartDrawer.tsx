@@ -11,7 +11,10 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
+import { useRouter } from "next/navigation";
+
 export default function CartDrawer() {
+  const router = useRouter();
   const { items, removeItem, updateQuantity, cartTotal, itemCount } = useCart();
   
   const [isMounted, setIsMounted] = useState(false);
@@ -83,9 +86,15 @@ export default function CartDrawer() {
               <span className="font-serif text-lg text-lumiere-dark">${cartTotal().toFixed(2)}</span>
             </div>
             <p className="text-xs text-lumiere-gray mb-6">Shipping and taxes calculated at checkout.</p>
-            <button className="w-full bg-lumiere-dark text-white py-4 text-sm tracking-widest uppercase hover:bg-lumiere-accent transition">
-              Proceed to Checkout →
-            </button>
+            <button 
+            onClick={() => {
+              // Drawer'ın kapanması için ekstra bir state ekleyebilirsin veya direkt yönlendirebilirsin
+              router.push('/checkout');
+            }}
+            className="w-full bg-lumiere-dark text-white py-4 text-sm tracking-widest uppercase hover:bg-lumiere-accent transition"
+          >
+            Proceed to Checkout →
+          </button>
           </div>
         )}
       </SheetContent>
