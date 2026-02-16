@@ -24,7 +24,9 @@ export default function Navbar() {
       {/* Icons */}
       <div className="flex gap-4 md:gap-5 items-center flex-1 justify-end">
         <Search size={20} className="cursor-pointer hidden sm:block hover:text-lumiere-accent transition" />
-        <User size={20} className="cursor-pointer hidden sm:block hover:text-lumiere-accent transition" />
+        <Link href="/login" className="hidden sm:block hover:text-lumiere-accent transition">
+          <User size={20} className="cursor-pointer" />
+        </Link>
         <CartDrawer />
       </div>
     </nav>
