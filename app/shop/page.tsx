@@ -4,11 +4,11 @@ import { prisma } from "@/lib/prisma";
 import ShopClient from "./ShopClient";
 
 export default async function ShopPage() {
-  // Veritabanındaki tüm ürünleri Server Component'te çekiyoruz
   const products = await prisma.product.findMany({
-    include: { category: true },
-    orderBy: { createdAt: 'desc' }
-  });
+ 
+  include: { category: true },
+  orderBy: { createdAt: 'desc' }
+});
 
   return (
     <main className="min-h-screen bg-lumiere-beige flex flex-col">
