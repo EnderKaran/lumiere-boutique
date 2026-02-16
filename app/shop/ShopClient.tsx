@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation"; // URL'deki arama parametresini okumak için eklendi
 import { Product, Category } from "@prisma/client";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
@@ -8,8 +9,13 @@ import { ChevronDown } from "lucide-react";
 type ProductWithCategory = Product & { category: Category | null };
 
 export default function ShopClient({ initialProducts }: { initialProducts: ProductWithCategory[] }) {
+  const searchParams = useSearchParams();
+  
+  // URL'den 'q' parametresini alıyoruz (Örn: /shop?q=silk)
+  const searchQuery = searchParams.get("q")?.toLowerCase() || "";
+
   // Filtre State'leri
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null); // null = View All
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedPrice, setSelectedPrice] = useState<string | null>(null);
 
@@ -18,43 +24,59 @@ export default function ShopClient({ initialProducts }: { initialProducts: Produ
     let matchCategory = true;
     let matchSize = true;
     let matchPrice = true;
+    let matchSearch = true;
 
-    // Kategori Filtresi
+    // 1. ARAMA FİLTRESİ: Ürün adı veya açıklamasında arama kelimesi geçiyor mu?
+    if (searchQuery) {
+      matchSearch = 
+        product.name.toLowerCase().includes(searchQuery) || 
+        (product.description?.toLowerCase().includes(searchQuery) || false);
+    }
+
+    // 2. KATEGORİ FİLTRESİ
     if (selectedCategory) {
       matchCategory = product.category?.name === selectedCategory;
     }
 
-    // Beden Filtresi
+    // 3. BEDEN FİLTRESİ
     if (selectedSize) {
       matchSize = product.sizes.includes(selectedSize);
     }
 
-    // Fiyat Filtresi
+    // 4. FİYAT FİLTRESİ
     if (selectedPrice) {
       if (selectedPrice === "$0 - $100") matchPrice = product.price >= 0 && product.price <= 100;
       if (selectedPrice === "$100 - $300") matchPrice = product.price > 100 && product.price <= 300;
       if (selectedPrice === "$300 +") matchPrice = product.price > 300;
     }
 
-    return matchCategory && matchSize && matchPrice;
+    return matchCategory && matchSize && matchPrice && matchSearch;
   });
 
   return (
     <>
       {/* Üst Bar (Sıralama ve Ürün Sayısı) */}
-      <section className="max-w-7xl mx-auto px-6 md:px-8 py-4 w-full flex justify-between items-center border-b border-zinc-200 mb-8">
-        <span className="text-sm text-lumiere-gray">Showing {filteredProducts.length} Products</span>
-        <div className="flex items-center gap-2 text-sm font-medium text-lumiere-dark cursor-pointer">
-          Sort by: Newest <ChevronDown size={16} />
+      <section className="max-w-7xl mx-auto px-6 md:px-8 py-4 w-full flex flex-col gap-4 border-b border-zinc-200 mb-8">
+        
+        {/* Arama Sonucu Bilgisi */}
+        {searchQuery && (
+          <div className="text-sm text-lumiere-gray italic">
+            Search results for: <span className="text-lumiere-dark font-semibold">"{searchQuery}"</span>
+          </div>
+        )}
+
+        <div className="flex justify-between items-center">
+          <span className="text-sm text-lumiere-gray">Showing {filteredProducts.length} Products</span>
+          <div className="flex items-center gap-2 text-sm font-medium text-lumiere-dark cursor-pointer">
+            Sort by: Newest <ChevronDown size={16} />
+          </div>
         </div>
       </section>
 
-      {/* Ana Düzen: Sol Sidebar + Sağ Ürün Grid'i */}
       <section className="max-w-7xl mx-auto px-6 md:px-8 w-full pb-24 flex flex-col md:flex-row gap-12 flex-1">
         
         {/* SOL SİDEBAR (Filtreler) */}
         <aside className="w-full md:w-64 shrink-0 space-y-10">
-          
           {/* Kategori Filtresi */}
           <div>
             <h3 className="font-serif text-lg text-lumiere-dark mb-4">Category</h3>
@@ -87,7 +109,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: Produ
               {['XS', 'S', 'M', 'L', 'XL'].map(size => (
                 <button 
                   key={size} 
-                  onClick={() => setSelectedSize(selectedSize === size ? null : size)} // Aynı bedene basarsa seçimi kaldırır
+                  onClick={() => setSelectedSize(selectedSize === size ? null : size)}
                   className={`py-2 text-xs transition border ${selectedSize === size ? 'border-lumiere-dark bg-lumiere-dark text-white' : 'border-zinc-300 bg-white text-lumiere-gray hover:border-lumiere-dark hover:text-lumiere-dark'}`}
                 >
                   {size}
@@ -114,8 +136,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: Produ
               ))}
             </div>
             
-            {/* Filtreleri Temizle Butonu (Sadece filtre seçiliyse görünür) */}
-            {(selectedCategory || selectedSize || selectedPrice) && (
+            {(selectedCategory || selectedSize || selectedPrice || searchQuery) && (
               <button 
                 onClick={() => { setSelectedCategory(null); setSelectedSize(null); setSelectedPrice(null); }}
                 className="mt-6 text-xs text-lumiere-gray underline underline-offset-4 hover:text-lumiere-dark transition"
@@ -131,7 +152,7 @@ export default function ShopClient({ initialProducts }: { initialProducts: Produ
           {filteredProducts.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-center border border-dashed border-zinc-300 rounded-lg">
               <h3 className="font-serif text-2xl text-lumiere-dark mb-2">No items found</h3>
-              <p className="text-lumiere-gray mb-6">We couldn't find any products matching your current filters.</p>
+              <p className="text-lumiere-gray mb-6">We couldn't find any products matching your search or filters.</p>
               <button 
                 onClick={() => { setSelectedCategory(null); setSelectedSize(null); setSelectedPrice(null); }}
                 className="bg-lumiere-dark text-white px-6 py-3 text-xs tracking-widest uppercase hover:bg-lumiere-accent transition"
@@ -144,7 +165,6 @@ export default function ShopClient({ initialProducts }: { initialProducts: Produ
               {filteredProducts.map((product) => (
                 <Link href={`/shop/${product.id}`} key={product.id} className="group block">
                   <div className="aspect-[3/4] overflow-hidden bg-zinc-100 mb-4 rounded-lg relative">
-                    
                     {product.price > 300 && (
                       <span className="absolute top-4 left-4 bg-white/90 text-lumiere-dark px-3 py-1 text-[10px] uppercase tracking-widest font-medium z-10">
                         Best Seller
