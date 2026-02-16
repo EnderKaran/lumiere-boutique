@@ -7,6 +7,18 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  /* 1. EKLENEN KISIM: Özel Lumiere Renkleri */
+  --color-lumiere-beige: #F9F5F1;
+  --color-lumiere-dark: #332621;
+  --color-lumiere-accent: #A67C52;
+  --color-lumiere-gray: #717171;
+
+  /* 2. EKLENEN KISIM: Özel Fontlar */
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);

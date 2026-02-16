@@ -1,5 +1,6 @@
-import { ShoppingBag, User, Search, Menu } from "lucide-react";
+import { User, Search, Menu } from "lucide-react";
 import Link from "next/link";
+import CartDrawer from "./CartDrawer";
 
 export default function Navbar() {
   return(
@@ -24,12 +25,7 @@ export default function Navbar() {
       <div className="flex gap-4 md:gap-5 items-center flex-1 justify-end">
         <Search size={20} className="cursor-pointer hidden sm:block hover:text-lumiere-accent transition" />
         <User size={20} className="cursor-pointer hidden sm:block hover:text-lumiere-accent transition" />
-        <div className="relative cursor-pointer hover:text-lumiere-accent transition">
-          <ShoppingBag size={20} />
-          <span className="absolute -top-2 -right-2 bg-lumiere-accent text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
-            0
-          </span>
-        </div>
+        <CartDrawer />
       </div>
     </nav>
   );
