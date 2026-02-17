@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LUMIÈRE — Quiet Luxury E-Commerce
 
-## Getting Started
+LUMIÈRE, modern web teknolojileriyle inşa edilmiş, **Sessiz Lüks** (Quiet Luxury) estetiğini odağına alan tam donanımlı bir e-ticaret platformudur. Müşterinin vitrin deneyiminden admin'in sipariş yönetimine kadar tüm süreci kapsayan bir Full-Stack projesidir.
 
-First, run the development server:
+---
+
+## Öne Çıkan Özellikler
+
+### Müşteri Deneyimi
+- **Dinamik Mağaza** — Kategori, beden ve fiyat filtrelemeli ürün listeleme sistemi
+- **Gelişmiş Sepet** — Zustand ile yönetilen, sayfa yenilense bile veriyi koruyan sepet yapısı
+- **Iyzico Simülasyonu** — Gerçekçi bir ödeme deneyimi sunan güvenli Checkout süreci
+- **Koleksiyonlar (Lookbook)** — Marka hikayesini anlatan estetik ve asimetrik görsel sayfalar
+
+### Yönetim Paneli (Admin Console)
+- **Analytics** — Recharts ile görselleştirilmiş haftalık ciro ve sipariş grafikleri
+- **Ürün Yönetimi** — Tam kapsamlı CRUD (Ekleme, Silme, Güncelleme) sistemi
+- **Sipariş Takibi** — Gelen siparişlerin durumunu (`Pending`, `Shipped`, `Delivered`) yönetme paneli
+
+---
+
+## 🛠️ Teknoloji Yığını
+
+| Katman | Teknoloji |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Veritabanı | Neon DB (PostgreSQL) |
+| ORM | Prisma |
+| Kimlik Doğrulama | Auth.js (NextAuth v5) |
+| State Management | Zustand |
+| UI & Styling | Tailwind CSS, Shadcn/UI, Lucide React |
+| Grafikler | Recharts |
+
+---
+
+## Kurulum
+
+### 1. Projeyi klonlayın
+
+```bash
+git clone https://github.com/kullaniciadi/lumiere-boutique.git
+cd lumiere-boutique
+```
+
+### 2. Bağımlılıkları yükleyin
+
+```bash
+npm install
+```
+
+### 3. Ortam değişkenlerini tanımlayın
+
+Projenin kök dizininde bir `.env` dosyası oluşturun:
+
+```env
+DATABASE_URL="postgresql://..."
+AUTH_SECRET="gizli-anahtarınız"
+```
+
+### 4. Veritabanını hazırlayın
+
+```bash
+npx prisma db push
+npx prisma db seed
+```
+
+### 5. Geliştirme sunucusunu başlatın
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Uygulama varsayılan olarak [http://localhost:3000](http://localhost:3000) adresinde çalışacaktır.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+##  Proje Yapısı
 
-## Learn More
+```
+lumiere-boutique/
+├── app/                  # Next.js App Router sayfaları
+│   ├── (store)/          # Müşteri arayüzü
+│   └── admin/            # Yönetim paneli
+├── components/           # Yeniden kullanılabilir UI bileşenleri
+├── lib/                  # Yardımcı fonksiyonlar ve konfigürasyon
+├── prisma/               # Veritabanı şeması ve seed dosyaları
+└── public/               # Statik dosyalar
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📄 Lisans
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Bu proje [MIT](LICENSE) lisansı altında dağıtılmaktadır.
