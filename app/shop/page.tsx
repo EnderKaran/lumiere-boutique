@@ -1,31 +1,27 @@
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import { Suspense } from "react"; 
 import { prisma } from "@/lib/prisma";
 import ShopClient from "./ShopClient";
 
+export const dynamic = "force-dynamic"; 
+
 export default async function ShopPage() {
+  // Ürünleri veritabanından çekiyoruz
   const products = await prisma.product.findMany({
- 
-  include: { category: true },
-  orderBy: { createdAt: 'desc' }
-});
+    include: { category: true },
+  });
 
   return (
-    <main className="min-h-screen bg-lumiere-beige flex flex-col">
-      <Navbar />
-      
-      {/* Sayfa Başlığı ve Açıklaması */}
-      <section className="max-w-7xl mx-auto px-6 md:px-8 pt-12 pb-8 w-full">
-        <h1 className="font-serif text-5xl md:text-6xl text-lumiere-dark mb-4">The Autumn Collection</h1>
-        <p className="text-lumiere-gray max-w-xl text-lg">
-          Curated pieces in earth tones and natural fibers. Designed for the changing seasons.
+    <main className="min-h-screen bg-lumiere-beige pt-20">
+      <div className="max-w-7xl mx-auto px-6 md:px-8 py-12">
+        <h1 className="font-serif text-5xl md:text-6xl text-lumiere-dark mb-4 text-center">Shop All</h1>
+        <p className="text-lumiere-gray text-center mb-16 max-w-2xl mx-auto italic">
+          Timeless silhouettes designed for the modern wardrobe.
         </p>
-      </section>
 
-      {/* İstemci Tarafı Filtreleme Bileşeni */}
-      <ShopClient initialProducts={products} />
-
-      <Footer />
+        <Suspense fallback={<div className="text-center py-20 italic">Loading shop...</div>}>
+          <ShopClient initialProducts={products} />
+        </Suspense>
+      </div>
     </main>
   );
 }
