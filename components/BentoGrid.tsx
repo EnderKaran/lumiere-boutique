@@ -62,7 +62,7 @@ export default function BentoGrid() {
               <p className="text-xs text-white/70 leading-relaxed mb-6">
                 Every piece tells a story of tradition and dedication.
               </p>
-              <Link href="/story" className="text-xs tracking-widest uppercase border-b border-white/30 w-fit pb-1 hover:border-white transition-colors">
+              <Link href="/about" className="text-xs tracking-widest uppercase border-b border-white/30 w-fit pb-1 hover:border-white transition-colors">
                 Read Story
               </Link>
             </div>
